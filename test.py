@@ -29,7 +29,6 @@ def get_model_parameters(model):
 def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim):
     data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
     profiler.start()
-    print("ENABLED: ",profiler.is_enabled())
     out = model(data)
     memory_utilization(device)
     profiler.stop()
@@ -42,11 +41,34 @@ def memory_utilization(device):
     print('Reserved:', round(torch.cuda.memory_reserved(0)/1024**3,1), 'GB')
 
 if __name__ == "__main__":
-    
-    transformer, device = initialize_transformer()
-    print(transformer)
 
+    num_tokens = 8
+    embedding_dim = 256
+    max_batch_size = 256
+    num_heads = 8
+
+    transformer, device = initialize_transformer()
+    print("#############################Model Parameters##############################")
+    print(transformer)
     print("#############################Running Profiler##############################")
+
+    batch_sizes = list(range(1, max_batch_size + 1))
+    flops = []
+    memory_usage = []
+
+    for batch_size in batch_sizes:
+        out = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
+
+        # Calculate FLOPs (floating-point operations) for the model
+        num_flops = 2 * num_tokens * embedding_dim * embedding_dim * num_heads
+        flops.append(num_flops)
+
+        # Calculate memory usage
+        memory_utilization(device)
+        memory_usage.append(torch.cuda.memory_reserved(0) / (1024 ** 3))
+
+
+    
     
     total_params = get_model_parameters(transformer)
     
