@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     num_tokens = 8
     embedding_dim = 256
-    max_batch_size = 256
+    max_batch_size = 10
     num_heads = 8
 
     transformer, device = initialize_transformer()
@@ -61,18 +61,18 @@ if __name__ == "__main__":
     memory_usage = []
 
     for batch_size in batch_sizes:
-        out = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
+        run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
 
-        # Calculate FLOPs (floating-point operations) for the model
-        num_flops = batch_size * num_tokens * embedding_dim * embedding_dim * num_heads
-        flops.append(num_flops)
+    #     # Calculate FLOPs (floating-point operations) for the model
+    #     num_flops = batch_size * num_tokens * embedding_dim * embedding_dim * num_heads
+    #     flops.append(num_flops)
 
-        # Calculate memory usage
-        memory_utilization(device)
-        memory_usage.append(torch.cuda.memory_reserved(0) / (1024 ** 3))
+    #     # Calculate memory usage
+    #     memory_utilization(device)
+    #     memory_usage.append(torch.cuda.memory_reserved(0) / (1024 ** 3))
 
-    print("Flops: ", str(flops))
-    print("Memory usage: ", str(memory_usage))
+    # print("Flops: ", str(flops))
+    # print("Memory usage: ", str(memory_usage))
 
 
     
