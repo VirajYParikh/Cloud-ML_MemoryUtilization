@@ -32,10 +32,10 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
     out = model(data)
     profiler.stop()
     events = profiler.profile()
-    for event in events:
-        print("Kernel Name:", event.key, "CUDA Time (ms):", event.cpu_time, "ms")
+    
+    print("Kernel Name:", events.key, "CUDA Time (ms):", events.cpu_time, "ms")
 
-    print(events)
+    
     
 
     
