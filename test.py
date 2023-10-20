@@ -29,6 +29,7 @@ def get_model_parameters(model):
 def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim):
     data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
     profiler.start()
+    print("ENABLED: ",profiler.is_enabled())
     out = model(data)
     memory_utilization(device)
     profiler.stop()
