@@ -30,8 +30,8 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
     data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
     profiler.start()
     out = model(data)
-    memory_utilization(device)
     profiler.stop()
+    return out
 
 def memory_utilization(device):
   if device == 'cuda':
