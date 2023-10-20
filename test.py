@@ -67,6 +67,9 @@ if __name__ == "__main__":
         memory_utilization(device)
         memory_usage.append(torch.cuda.memory_reserved(0) / (1024 ** 3))
 
+    print("Flops: ", str(flops))
+    print("Memory usage: ", str(memory_usage))
+
 
     
     
