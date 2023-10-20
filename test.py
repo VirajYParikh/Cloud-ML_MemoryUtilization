@@ -30,6 +30,7 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
     data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
     profiler.start()
     out = model(data)
+    memory_utilization(device)
     profiler.stop()
 
 def memory_utilization(device):
@@ -47,7 +48,6 @@ if __name__ == "__main__":
     print("#############################Running Profiler##############################")
     
     total_params = get_model_parameters(transformer)
-    memory_utilization(device)
     
     batch_size = 1
     num_tokens = 10
