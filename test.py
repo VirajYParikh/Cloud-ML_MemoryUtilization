@@ -31,7 +31,11 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
     profiler.start()
     out = model(data)
     profiler.stop()
-    return out
+    events = profiler.profile()
+    print(events)
+    
+
+    
 
 def memory_utilization(device):
   if device == 'cuda':
@@ -60,7 +64,7 @@ if __name__ == "__main__":
         out = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
 
         # Calculate FLOPs (floating-point operations) for the model
-        num_flops = 2 * num_tokens * embedding_dim * embedding_dim * num_heads
+        num_flops = batch_size * num_tokens * embedding_dim * embedding_dim * num_heads
         flops.append(num_flops)
 
         # Calculate memory usage
