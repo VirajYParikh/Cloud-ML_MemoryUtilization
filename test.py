@@ -5,7 +5,7 @@ from torch.cuda import memory_allocated, memory_reserved
 
 
 def initialize_transformer():
-    device = 'cpu'
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
     # Parameters
     embedding_dim = 256
