@@ -34,7 +34,7 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
     with profile(activities=[ProfilerActivity.CUDA], record_shapes=True) as prof:
         with record_function("model_inference"):
             model(data)
-    gpu_time = prof.key_averages().cuda_time
+    gpu_time = prof.key_averages().cuda_time_total
     memory_usage = prof.key_averages().device_memory_usage
     print("GPU Time: ", gpu_time)
     print("Memory Usage: ", memory_usage)
