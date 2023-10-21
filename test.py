@@ -41,7 +41,7 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
     # print("Memory Usage: ", memory_usage)
     
     profiler.stop()
-    return cpu_time, memory_usage
+    return cpu_time
     
     
     
