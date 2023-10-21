@@ -35,12 +35,13 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
         with record_function("model_inference"):
             model(data)
     cpu_time = prof.key_averages().self_cpu_time_total
+    memory_usage = memory_utilization(device)
     # memory_usage = prof.key_averages().device_memory_usage
     print("GPU Time: ", cpu_time)
     # print("Memory Usage: ", memory_usage)
     
     profiler.stop()
-    return cpu_time
+    return cpu_time, memory_usage
     
     
     
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     num_heads = 8
 
     transformer, device = initialize_transformer()
-    print("#############################Model Parameters##############################")
+    
     print(transformer)
     print("#############################Running Profiler##############################")
 
@@ -74,19 +75,8 @@ if __name__ == "__main__":
         gpu_results[batch_size] = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
 
     print(gpu_results)
-    #     # Calculate FLOPs (floating-point operations) for the model
-    #     num_flops = batch_size * num_tokens * embedding_dim * embedding_dim * num_heads
-    #     flops.append(num_flops)
 
-    #     # Calculate memory usage
-    #     memory_utilization(device)
-    #     memory_usage.append(torch.cuda.memory_reserved(0) / (1024 ** 3))
-
-    # print("Flops: ", str(flops))
-    # print("Memory usage: ", str(memory_usage))
-
-
-    
+    print("#############################Model Parameters##############################")
     
     total_params = get_model_parameters(transformer)
     
