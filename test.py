@@ -41,7 +41,7 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
     # print("Memory Usage: ", memory_usage)
     
     profiler.stop()
-    return memory_usage
+    return cpu_time
     
     
     
@@ -70,10 +70,12 @@ if __name__ == "__main__":
     batch_sizes = list(range(1, max_batch_size + 1))
     memory_usage = []
 
-    gpu_results = {}
+    gpu_results = []
     for batch_size in range(min_batch_size, max_batch_size + 1, 64):
 
-        gpu_results = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
+        gpu_result = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
+        gpu_results.append(gpu_result)
+
 
     print(gpu_results)
 
