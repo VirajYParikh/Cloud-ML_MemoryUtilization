@@ -1,6 +1,6 @@
 import torch
 from torch.nn import TransformerEncoderLayer
-import torch.profiler.profile as profiler
+# import torch.profiler.profile as profiler
 from torch.cuda import memory_allocated, memory_reserved
 import torchvision.models as models
 from torch.profiler import profile, record_function, ProfilerActivity
