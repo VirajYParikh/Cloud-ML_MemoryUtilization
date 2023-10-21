@@ -36,6 +36,7 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
             model(data)
     flops = prof.key_averages().flops
     print("Flops: ", flops)
+    
     # key_averages = prof.key_averages()
     # total_self_cpu_time = 0.0
 
@@ -48,6 +49,7 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
 
     print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))
     profiler.stop()
+    return flops
     # events = profiler.profile()
     
     # print("Kernel Name:", events.key, "CUDA Time (ms):", events.cpu_time, "ms")
@@ -81,8 +83,10 @@ if __name__ == "__main__":
 
     flops_results = {}
     for batch_size in batch_sizes:
+
         flops_results[batch_size] = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
 
+    print(flops_results)
     #     # Calculate FLOPs (floating-point operations) for the model
     #     num_flops = batch_size * num_tokens * embedding_dim * embedding_dim * num_heads
     #     flops.append(num_flops)
