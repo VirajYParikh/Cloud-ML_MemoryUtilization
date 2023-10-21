@@ -59,7 +59,7 @@ if __name__ == "__main__":
     num_tokens = 8
     embedding_dim = 256
     min_batch_size = 128
-    max_batch_size = 1024
+    max_batch_size = 4096
     num_heads = 8
 
     transformer, device = initialize_transformer()
