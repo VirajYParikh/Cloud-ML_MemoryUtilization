@@ -1,7 +1,9 @@
 import torch
 from torch.nn import TransformerEncoderLayer
-import torch.cuda.profiler as profiler
+import torch.profiler.profile as profiler
 from torch.cuda import memory_allocated, memory_reserved
+import torchvision.models as models
+from torch.profiler import profile, record_function, ProfilerActivity
 
 
 def initialize_transformer():
@@ -30,10 +32,15 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
     data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
     profiler.start()
     out = model(data)
+    with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+        with record_function("model_inference"):
+            model(data)
+
+    print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))
     profiler.stop()
-    events = profiler.profile()
+    # events = profiler.profile()
     
-    print("Kernel Name:", events.key, "CUDA Time (ms):", events.cpu_time, "ms")
+    # print("Kernel Name:", events.key, "CUDA Time (ms):", events.cpu_time, "ms")
 
     
     
