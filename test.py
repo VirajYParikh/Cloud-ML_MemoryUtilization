@@ -56,7 +56,8 @@ if __name__ == "__main__":
 
     num_tokens = 8
     embedding_dim = 256
-    max_batch_size = 10
+    min_batch_size = 128
+    max_batch_size = 1024
     num_heads = 8
 
     transformer, device = initialize_transformer()
@@ -68,7 +69,7 @@ if __name__ == "__main__":
     memory_usage = []
 
     gpu_results = {}
-    for batch_size in batch_sizes:
+    for batch_size in range(min_batch_size, max_batch_size + 1, 128):
 
         gpu_results[batch_size] = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
 
