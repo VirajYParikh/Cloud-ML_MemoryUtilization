@@ -3,7 +3,7 @@ from torch.nn import TransformerEncoderLayer
 import torch.cuda.profiler as profiler
 from torch.cuda import memory_allocated, memory_reserved
 import torchvision.models as models
-from torch.profiler import profile, record_function, ProfilerActivity
+from torch.profiler import profile, record_function, ProfilerActivity, _KinetoProfile
 
 
 def initialize_transformer():
@@ -31,17 +31,18 @@ def get_model_parameters(model):
 def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim):
     data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
     # profiler.start()
-    with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+    with profile(activities=[ProfilerActivity.CPU], record_shapes=True, with_flops=True) as prof:
         with record_function("model_inference"):
             model(data)
+    flops = prof.key_averages().flops
+    print("Flops: ", flops)
+    # key_averages = prof.key_averages()
+    # total_self_cpu_time = 0.0
 
-    key_averages = prof.key_averages()
-    total_self_cpu_time = 0.0
-
-    for layer_name, layer_stats in key_averages.items():
-        total_self_cpu_time += layer_stats.self_cpu_time_total
+    # for layer_name, layer_stats in key_averages.items():
+    #     total_self_cpu_time += layer_stats.self_cpu_time_total
     
-    return total_self_cpu_time
+    # return total_self_cpu_time
 
     
 
