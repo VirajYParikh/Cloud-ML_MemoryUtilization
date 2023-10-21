@@ -31,10 +31,10 @@ def get_model_parameters(model):
 def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim):
     data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
     profiler.start()
-    with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+    with profile(activities=[ProfilerActivity.CUDA], record_shapes=True) as prof:
         with record_function("model_inference"):
             model(data)
-    cpu_time = prof.key_averages().cpu_time
+    cpu_time = prof.key_averages().self.gpu_time_total
     memory_usage = prof.key_averages().device_memory_usage
     print("GPU Time: ", cpu_time)
     print("Memory Usage: ", memory_usage)
