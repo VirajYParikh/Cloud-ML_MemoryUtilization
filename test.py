@@ -30,30 +30,15 @@ def get_model_parameters(model):
 
 def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim):
     data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
-    # profiler.start()
-    with profile(activities=[ProfilerActivity.CPU], record_shapes=True, with_flops=True) as prof:
+    profiler.start()
+    with profile(activities=[ProfilerActivity.CUDA], record_shapes=True) as prof:
         with record_function("model_inference"):
             model(data)
-    flops = prof.key_averages().flops
-    print("Flops: ", flops)
+    gpu_time = prof.key_averages().cuda_time
+    print("GPU Time: ", gpu_time)
     
-    # key_averages = prof.key_averages()
-    # total_self_cpu_time = 0.0
-
-    # for layer_name, layer_stats in key_averages.items():
-    #     total_self_cpu_time += layer_stats.self_cpu_time_total
-    
-    # return total_self_cpu_time
-
-    
-
-    print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))
     profiler.stop()
-    return flops
-    # events = profiler.profile()
-    
-    # print("Kernel Name:", events.key, "CUDA Time (ms):", events.cpu_time, "ms")
-
+    return gpu_time
     
     
     
@@ -78,15 +63,14 @@ if __name__ == "__main__":
     print("#############################Running Profiler##############################")
 
     batch_sizes = list(range(1, max_batch_size + 1))
-    flops = []
     memory_usage = []
 
-    flops_results = {}
+    gpu_results = {}
     for batch_size in batch_sizes:
 
-        flops_results[batch_size] = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
+        gpu_results[batch_size] = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
 
-    print(flops_results)
+    print(gpu_results)
     #     # Calculate FLOPs (floating-point operations) for the model
     #     num_flops = batch_size * num_tokens * embedding_dim * embedding_dim * num_heads
     #     flops.append(num_flops)
