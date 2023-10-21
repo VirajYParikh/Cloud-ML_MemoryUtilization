@@ -52,6 +52,7 @@ def memory_utilization(device):
     print('Memory Usage:')
     print('Allocated:', round(torch.cuda.memory_allocated(0)/1024**3,1), 'GB')
     print('Reserved:', round(torch.cuda.memory_reserved(0)/1024**3,1), 'GB')
+    return round(torch.cuda.memory_allocated(0)/1024**3,1) + round(torch.cuda.memory_reserved(0)/1024**3,1)
 
 if __name__ == "__main__":
 
