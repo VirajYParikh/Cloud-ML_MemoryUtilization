@@ -5,6 +5,7 @@ from torch.cuda import memory_allocated, memory_reserved
 import torchvision.models as models
 from torch.profiler import profile, record_function, ProfilerActivity
 import torch.nn.functional as F
+import argparse
 
 
 def initialize_transformer():
@@ -36,9 +37,10 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
     profiler.stop()
     print("#############################Profiler Results##############################")
     # print(profiler.key_averages().table(sort_by="cuda_time_total"))
+    memory_utilization(device)
     output = F.log_softmax(out, dim=1)
     return output
-    # memory_usage = memory_utilization(device)
+    
     
     
     
@@ -54,10 +56,38 @@ def memory_utilization(device):
 
 if __name__ == "__main__":
 
+    parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
+    parser.add_argument('--batch-size', type=int, default=64, metavar='N',
+                        help='input batch size for training (default: 64)')
+    parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
+                        help='input batch size for testing (default: 1000)')
+    parser.add_argument('--epochs', type=int, default=14, metavar='N',
+                        help='number of epochs to train (default: 14)')
+    parser.add_argument('--lr', type=float, default=1.0, metavar='LR',
+                        help='learning rate (default: 1.0)')
+    parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
+                        help='Learning rate step gamma (default: 0.7)')
+    parser.add_argument('--no-cuda', action='store_true', default=False,
+                        help='disables CUDA training')
+    parser.add_argument('--no-mps', action='store_true', default=False,
+                        help='disables macOS GPU training')
+    parser.add_argument('--dry-run', action='store_true', default=False,
+                        help='quickly check a single pass')
+    parser.add_argument('--seed', type=int, default=1, metavar='S',
+                        help='random seed (default: 1)')
+    parser.add_argument('--log-interval', type=int, default=10, metavar='N',
+                        help='how many batches to wait before logging training status')
+    parser.add_argument('--save-model', action='store_true', default=False,
+                        help='For Saving the current Model')
+    args = parser.parse_args()
+
+
+
+
     num_tokens = 8
     embedding_dim = 256
     min_batch_size = 128
-    max_batch_size = 4096
+    max_batch_size = 1024
     num_heads = 8
 
     transformer, device = initialize_transformer()
