@@ -72,7 +72,7 @@ if __name__ == "__main__":
     for batch_size in range(min_batch_size, max_batch_size + 1, 64):
 
         output = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
-        print("Output: " + output)
+        print("Output: ",output)
         # gpu_results.append(gpu_result)
 
 
