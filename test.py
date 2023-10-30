@@ -4,6 +4,7 @@ import torch.cuda.profiler as profiler
 from torch.cuda import memory_allocated, memory_reserved
 import torchvision.models as models
 from torch.profiler import profile, record_function, ProfilerActivity
+import torch.nn.functional as F
 
 
 def initialize_transformer():
@@ -31,17 +32,14 @@ def get_model_parameters(model):
 def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim):
     data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
     profiler.start()
-    with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
-        with record_function("model_inference"):
-            model(data)
-    cpu_time = prof.key_averages().self_cpu_time_total
-    memory_usage = memory_utilization(device)
-    # memory_usage = prof.key_averages().device_memory_usage
-    print("GPU Time: ", cpu_time)
-    # print("Memory Usage: ", memory_usage)
-    
+    out = model(data)
     profiler.stop()
-    return memory_usage
+    print("#############################Profiler Results##############################")
+    print(profiler.key_averages().table(sort_by="cuda_time_total"))
+    output = F.log_softmax(out, dim=1)
+    return output
+    # memory_usage = memory_utilization(device)
+    
     
     
     
@@ -73,18 +71,19 @@ if __name__ == "__main__":
     gpu_results = []
     for batch_size in range(min_batch_size, max_batch_size + 1, 64):
 
-        gpu_result = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
-        gpu_results.append(gpu_result)
+        output = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
+        print("Output: " + output)
+        # gpu_results.append(gpu_result)
 
 
-    print(gpu_results)
+    # print(gpu_results)
 
     print("#############################Model Parameters##############################")
     
     total_params = get_model_parameters(transformer)
     
-    batch_size = 1
-    num_tokens = 10
-    embedding_dim = 256
+    # batch_size = 1
+    # num_tokens = 10
+    # embedding_dim = 256
     
-    run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
+    # run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
