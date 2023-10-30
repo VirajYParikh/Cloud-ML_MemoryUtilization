@@ -35,7 +35,7 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
     out = model(data)
     profiler.stop()
     print("#############################Profiler Results##############################")
-    print(profiler.key_averages().table(sort_by="cuda_time_total"))
+    # print(profiler.key_averages().table(sort_by="cuda_time_total"))
     output = F.log_softmax(out, dim=1)
     return output
     # memory_usage = memory_utilization(device)
