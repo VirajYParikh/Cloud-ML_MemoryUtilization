@@ -21,7 +21,7 @@ def initialize_transformer():
     transformer_block = Transformer(
         d_model=embedding_dim, nhead=num_heads, dim_feedforward=dff, activation=activation, batch_first=True, norm_first=False
     )
-
+    
     transformer_block = transformer_block.to(device)
     transformer_block.eval()
     
@@ -32,9 +32,11 @@ def get_model_parameters(model):
       print(name, " : ", tensor.numel(), "parameters")
 
 def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim):
-    data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
+    # data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
+    src = torch.rand((10, 32, 512)).to(device)
+    tgt = torch.rand((20, 32, 512))
     profiler.start()
-    out = model(data)
+    out = model(src, tgt)
     profiler.stop()
     print("#############################Profiler Results##############################")
     # print(profiler.key_averages().table(sort_by="cuda_time_total"))
