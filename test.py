@@ -48,11 +48,11 @@ def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim
 
 def memory_utilization(device):
   if device == 'cuda':
-    print(torch.cuda.get_device_name(0))
+    print(torch.cuda.get_device_name(device))
     print('Memory Usage:')
-    print('Allocated:', round(torch.cuda.memory_allocated(0)/1024**3,1), 'GB')
-    print('Reserved:', round(torch.cuda.memory_reserved(0)/1024**3,1), 'GB')
-    return round(torch.cuda.memory_allocated(0)/1024**3,1) + round(torch.cuda.memory_reserved(0)/1024**3,1)
+    print('Allocated:', round(torch.cuda.memory_allocated(device)/1024**3,1), 'GB')
+    print('Reserved:', round(torch.cuda.memory_reserved(device)/1024**3,1), 'GB')
+    return round(torch.cuda.memory_allocated(device)/1024**3,1) + round(torch.cuda.memory_reserved(device)/1024**3,1)
 
 if __name__ == "__main__":
 
@@ -97,12 +97,12 @@ if __name__ == "__main__":
 
     batch_sizes = list(range(1, max_batch_size + 1))
     memory_usage = []
+    batch_size = 128
+    # gpu_results = []
+    # for batch_size in range(min_batch_size, max_batch_size + 1, 64):
 
-    gpu_results = []
-    for batch_size in range(min_batch_size, max_batch_size + 1, 64):
-
-        output = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
-        print("Output: ",output)
+    output = run_profiler_experiment(transformer, device, batch_size, num_tokens, embedding_dim)
+    print("Output: ",output)
         # gpu_results.append(gpu_result)
 
 
