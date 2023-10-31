@@ -13,7 +13,7 @@ def initialize_transformer():
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
     # Parameters
-    embedding_dim = 256
+    embedding_dim = 512
     num_heads = 8
     dff = 512
     activation = 'relu'
