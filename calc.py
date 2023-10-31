@@ -6,7 +6,7 @@ ffma_sum = 0
 fmul_sum = 0
 
 # Read the text file
-with open('your_file.txt', 'r') as file:
+with open('output.txt', 'r') as file:
     text = file.read()
 
 # Define a regular expression pattern to match the metric lines
