@@ -33,8 +33,8 @@ def get_model_parameters(model):
 
 def run_profiler_experiment(model, device, batch_size, num_tokens, embedding_dim):
     # data = torch.rand(batch_size, num_tokens, embedding_dim).to(device)
-    src = torch.rand((10, 32, 512)).to(device)
-    tgt = torch.rand((20, 32, 512))
+    src = torch.rand((batch_size, 32, 512)).to(device)
+    tgt = torch.rand((batch_sizes, 32, 512)).to(device)
     profiler.start()
     out = model(src, tgt)
     profiler.stop()
