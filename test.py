@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
 
     num_tokens = 8
-    embedding_dim = 256
+    embedding_dim = 512
     min_batch_size = 128
     max_batch_size = 1024
     num_heads = 8
@@ -100,7 +100,7 @@ if __name__ == "__main__":
 
     batch_sizes = list(range(1, max_batch_size + 1))
     memory_usage = []
-    batch_size = 128
+    batch_size = 256
     # gpu_results = []
     # for batch_size in range(min_batch_size, max_batch_size + 1, 64):
 
