@@ -1,5 +1,6 @@
 import torch
 from torch.nn import TransformerEncoderLayer
+from torch.nn import Transformer
 import torch.cuda.profiler as profiler
 from torch.cuda import memory_allocated, memory_reserved
 import torchvision.models as models
@@ -17,7 +18,7 @@ def initialize_transformer():
     dff = 512
     activation = 'relu'
 
-    transformer_block = TransformerEncoderLayer(
+    transformer_block = Transformer(
         d_model=embedding_dim, nhead=num_heads, dim_feedforward=dff, activation=activation, batch_first=True, norm_first=False
     )
 
