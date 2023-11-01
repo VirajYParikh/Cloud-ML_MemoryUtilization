@@ -13,7 +13,7 @@ def initialize_transformer():
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
     # Parameters
-    embedding_dim = 512
+    embedding_dim = 256
     num_heads = 8
     dff = 512
     activation = 'relu'
@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
 
     num_tokens = 8
-    embedding_dim = 512
+    embedding_dim = 256
     min_batch_size = 128
     max_batch_size = 1024
     num_heads = 8
@@ -100,7 +100,7 @@ if __name__ == "__main__":
 
     batch_sizes = list(range(1, max_batch_size + 1))
     memory_usage = []
-    batch_size = 256
+    batch_size = 128
     # gpu_results = []
     # for batch_size in range(min_batch_size, max_batch_size + 1, 64):
 
